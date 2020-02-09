@@ -29,10 +29,11 @@ public class BookServiceImpl implements BookService {
 	public Book findBookById(Long bookId) throws ResourceNotFoundException {
 		Optional<Book> book = bookRepository.findById(bookId);
 		if (book.isPresent()) {
+			logger.info("Found book with: {}", bookId);
 			return book.get();
 		}
 
-		throw new ResourceNotFoundException("Book not found with this id");
+		throw new ResourceNotFoundException("No book found with id="+bookId);
 	}
 
 	@Override
@@ -43,10 +44,11 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public void deleteBook(Long bookId) throws BookDeletionException {
 		if (bookRepository.existsById(bookId)) {
+			logger.info("Found book with: {}", bookId);
 			bookRepository.deleteById(bookId);
+		} else {
+			throw new BookDeletionException("No book found with id="+bookId);
 		}
-
-		throw new BookDeletionException("Book not found with this id");
 	}
 
 }
