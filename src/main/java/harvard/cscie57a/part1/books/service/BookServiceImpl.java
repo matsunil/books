@@ -29,7 +29,7 @@ public class BookServiceImpl implements BookService {
 	public Book findBookById(Long bookId) throws ResourceNotFoundException {
 		Optional<Book> book = bookRepository.findById(bookId);
 		if (book.isPresent()) {
-			logger.info("Found book with: {}", bookId);
+			logger.info("Found book with id: {}", bookId);
 			return book.get();
 		}
 
@@ -42,9 +42,26 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
+	public Book updateBook(Long bookId, Book bookRequest) {
+		Optional<Book> optionalBook = bookRepository.findById(bookId);
+		if (optionalBook.isPresent()) {
+			logger.info("Found book with id: {}", bookId);
+
+			Book book = optionalBook.get();
+			book.setTitle(bookRequest.getTitle());
+			book.setAuthor(bookRequest.getAuthor());
+			book.setPublisher(bookRequest.getPublisher());
+
+			return bookRepository.save(book);
+		}
+
+		throw new ResourceNotFoundException("No book found with id="+bookId);
+	}
+
+	@Override
 	public void deleteBook(Long bookId) throws BookDeletionException {
 		if (bookRepository.existsById(bookId)) {
-			logger.info("Found book with: {}", bookId);
+			logger.info("Found book with id: {}", bookId);
 			bookRepository.deleteById(bookId);
 		} else {
 			throw new BookDeletionException("No book found with id="+bookId);

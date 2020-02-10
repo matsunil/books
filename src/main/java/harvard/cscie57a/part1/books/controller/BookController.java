@@ -18,7 +18,6 @@ import harvard.cscie57a.part1.books.exception.ResourceNotFoundException;
 import harvard.cscie57a.part1.books.model.Book;
 import harvard.cscie57a.part1.books.service.BookService;
 
-
 /**
  * API interface
  * 
@@ -46,12 +45,12 @@ public class BookController {
 	 */
 	@GetMapping(value = "/books/{bookId}")
 	public ResponseEntity<?> getBookById(@PathVariable("bookId") Long bookId) throws ResourceNotFoundException {
-		logger.info("Getting book with: {}", bookId);
+		logger.info("Getting book with id: {}", bookId);
 		return new ResponseEntity<>(bookService.findBookById(bookId), HttpStatus.OK);
 	}
 
 	/**
-	 * Example POST
+	 * POST
 	 */
 	@PostMapping(value = "/books")
 	public ResponseEntity<?> addNewBook(@RequestBody Book book) {
@@ -60,11 +59,11 @@ public class BookController {
 	}
 
 	/**
-	 * Example PUT
+	 * PUT
 	 */
 	@PutMapping(value = "/books/{bookId}")
-	public ResponseEntity<?> updateBook(@RequestBody Book book) {
-		logger.info("Updating book with: {}", book);
+	public ResponseEntity<?> updateBook(@PathVariable("bookId") Long bookId, @RequestBody Book book) {
+		logger.info("Updating book: {} with id: {}", book, bookId);
 		return new ResponseEntity<>(bookService.saveBook(book), HttpStatus.OK);
 	}
 
@@ -73,7 +72,7 @@ public class BookController {
 	 */
 	@DeleteMapping(value = "/books/{bookId}")
 	public ResponseEntity<?> deleteBook(@PathVariable("bookId") Long bookId) {
-		logger.info("Deleting book with: {}", bookId);
+		logger.info("Deleting book with id: {}", bookId);
 		bookService.deleteBook(bookId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

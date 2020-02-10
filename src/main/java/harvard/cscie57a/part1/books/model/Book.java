@@ -3,9 +3,12 @@ package harvard.cscie57a.part1.books.model;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Book {
@@ -13,8 +16,17 @@ public class Book {
 	@Id
 	private Long id;
 
+	@NotNull
+    @Size(max = 100)
+    @Column(unique = true)
 	private String title;
+
+	@NotNull
+    @Size(max = 100)
 	private String author;
+	
+	@NotNull
+    @Size(max = 100)
 	private String publisher;
 
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)

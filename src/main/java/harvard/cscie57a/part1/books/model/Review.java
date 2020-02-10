@@ -8,7 +8,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Review implements Serializable {
@@ -19,13 +28,24 @@ public class Review implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@NotNull
+    @Size(max = 100)	
 	private String name;
+
+	@NotNull
+    @Size(max = 100)
+	@Email
 	private String email;
-	private String content;
+
+	@NotNull
+    @Lob
+    private String content;
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "BOOK_ID", referencedColumnName = "ID")
-	private Book book;
+	@OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Book book;
 
 	public Long getId() {
 		return id;

@@ -14,6 +14,8 @@ public interface BookService {
 
 	Book saveBook(Book book);
 
+	Book updateBook(Long bookId, Book bookRequest);
+
 	void deleteBook(Long bookId) throws BookDeletionException;
 
 }
