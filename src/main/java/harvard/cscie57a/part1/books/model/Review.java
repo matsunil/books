@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -25,7 +26,8 @@ public class Review implements Serializable {
 	private static final long serialVersionUID = -7091347136035383664L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_generator")
+	@SequenceGenerator(name="review_generator", sequenceName = "review_seq", initialValue = 6, allocationSize=50)
 	private Long id;
 
 	@NotNull

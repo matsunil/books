@@ -38,11 +38,12 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public Book saveBook(Book book) {
+		book.setId(null); //book id set by sequence
 		return bookRepository.save(book);
 	}
 
 	@Override
-	public Book updateBook(Long bookId, Book bookRequest) {
+	public Book updateBook(Long bookId, Book bookRequest) throws ResourceNotFoundException {
 		Optional<Book> optionalBook = bookRepository.findById(bookId);
 		if (optionalBook.isPresent()) {
 			logger.info("Found book with id: {}", bookId);

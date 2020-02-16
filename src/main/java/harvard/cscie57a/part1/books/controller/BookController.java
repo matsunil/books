@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import harvard.cscie57a.part1.books.exception.BookDeletionException;
 import harvard.cscie57a.part1.books.exception.ResourceNotFoundException;
 import harvard.cscie57a.part1.books.model.Book;
 import harvard.cscie57a.part1.books.service.BookService;
@@ -31,7 +32,7 @@ public class BookController {
 	private static final Logger logger = LoggerFactory.getLogger(BookController.class);
 
 	/**
-	 * Using @PathVariable
+	 * Get all books
 	 */
 	@GetMapping(value = "/books", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getBooks() {
@@ -40,7 +41,8 @@ public class BookController {
 	}
 
 	/**
-	 * Using @PathVariable
+	 * Get book by book id
+	 * Using @PathVariable bookId
 	 * @throws ResourceNotFoundException 
 	 */
 	@GetMapping(value = "/books/{bookId}")
@@ -50,7 +52,8 @@ public class BookController {
 	}
 
 	/**
-	 * POST
+	 * POST book
+	 * Using @RequestBody book
 	 */
 	@PostMapping(value = "/books")
 	public ResponseEntity<?> addNewBook(@RequestBody Book book) {
@@ -59,19 +62,25 @@ public class BookController {
 	}
 
 	/**
-	 * PUT
+	 * PUT book by book id
+	 * Using @PathVariable bookId
+	 * Using @RequestBody book
+	 * @throws ResourceNotFoundException
 	 */
 	@PutMapping(value = "/books/{bookId}")
-	public ResponseEntity<?> updateBook(@PathVariable("bookId") Long bookId, @RequestBody Book book) {
+	public ResponseEntity<?> updateBook(@PathVariable("bookId") Long bookId, @RequestBody Book book)
+			throws ResourceNotFoundException {
 		logger.info("Updating book: {} with id: {}", book, bookId);
-		return new ResponseEntity<>(bookService.saveBook(book), HttpStatus.OK);
+		return new ResponseEntity<>(bookService.updateBook(bookId, book), HttpStatus.OK);
 	}
 
 	/**
-	 * DELETE
+	 * DELETE book by book id
+	 * Using @PathVariable bookId
+	 * @throws BookDeletionException
 	 */
 	@DeleteMapping(value = "/books/{bookId}")
-	public ResponseEntity<?> deleteBook(@PathVariable("bookId") Long bookId) {
+	public ResponseEntity<?> deleteBook(@PathVariable("bookId") Long bookId) throws BookDeletionException {
 		logger.info("Deleting book with id: {}", bookId);
 		bookService.deleteBook(bookId);
 		return new ResponseEntity<>(HttpStatus.OK);

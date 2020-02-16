@@ -14,7 +14,7 @@ public interface BookService {
 
 	Book saveBook(Book book);
 
-	Book updateBook(Long bookId, Book bookRequest);
+	Book updateBook(Long bookId, Book bookRequest) throws ResourceNotFoundException;
 
 	void deleteBook(Long bookId) throws BookDeletionException;
 

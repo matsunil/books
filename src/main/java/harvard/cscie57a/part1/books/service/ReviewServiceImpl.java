@@ -27,7 +27,13 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public List<Review> getAllReviewsByBookId(Long bookId) {
-		return reviewRepository.findByBookId(bookId);
+		Optional<Book> optionalBook = bookRepository.findById(bookId);
+		if (optionalBook.isPresent()) {
+			logger.info("Found book with id: {}", bookId);
+			return reviewRepository.findByBookId(bookId);
+		}
+		
+		throw new ResourceNotFoundException("No book found with id="+bookId);
 	}
 
 	@Override
@@ -42,12 +48,13 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public Review saveReview(Long bookId, Review review) {
+	public Review saveReview(Long bookId, Review review) throws ResourceNotFoundException {
 		Optional<Book> optionalBook = bookRepository.findById(bookId);
 		if (optionalBook.isPresent()) {
 			logger.info("Found book with id: {}", bookId);
 
 			Book book = optionalBook.get();
+			review.setId(null); //review id set by sequence
 			review.setBook(book);
 
 			return reviewRepository.save(review);
@@ -58,13 +65,9 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public Review updateReview(Long bookId, Long reviewId, Review reviewRequest) {
-		if (!bookRepository.existsById(bookId)) {
-			throw new ResourceNotFoundException("No book found with id="+bookId);
-		}
-
-		Optional<Review> optionalReview = reviewRepository.findById(reviewId);
+		Optional<Review> optionalReview = reviewRepository.findByIdAndBookId(reviewId, bookId);
 		if (optionalReview.isPresent()) {
-			logger.info("Found review with id: {}", reviewId);
+			logger.info("Found review with bookId: {} and reviewId: {}", bookId, reviewId);
 
 			Review review = optionalReview.get();
 			review.setName(reviewRequest.getName());
@@ -74,7 +77,7 @@ public class ReviewServiceImpl implements ReviewService {
 			return reviewRepository.save(review);
 		}
 
-		throw new ResourceNotFoundException("No review found with id="+reviewId);
+		throw new ResourceNotFoundException("No review found with bookId="+bookId+" and reviewId="+reviewId);
 	}
 
 	@Override
