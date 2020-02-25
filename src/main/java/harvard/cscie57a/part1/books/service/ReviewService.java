@@ -16,6 +16,6 @@ public interface ReviewService {
 
 	Review updateReview(Long bookId, Long reviewId, Review reviewRequest) throws ResourceNotFoundException;
 
-	void deleteReview(Long bookId, Long reviewId) throws ReviewDeletionException;
+	void deleteReview(Long bookId, Long reviewId) throws ReviewDeletionException, ResourceNotFoundException;
 
 }

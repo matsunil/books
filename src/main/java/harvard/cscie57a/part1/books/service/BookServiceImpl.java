@@ -60,12 +60,16 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public void deleteBook(Long bookId) throws BookDeletionException {
+	public void deleteBook(Long bookId) throws BookDeletionException, ResourceNotFoundException {
 		if (bookRepository.existsById(bookId)) {
 			logger.info("Found book with id: {}", bookId);
-			bookRepository.deleteById(bookId);
+			try {
+				bookRepository.deleteById(bookId);
+			} catch (Exception e) {
+				throw new BookDeletionException("Exception deleting book with id="+bookId);
+			}
 		} else {
-			throw new BookDeletionException("No book found with id="+bookId);
+			throw new ResourceNotFoundException("No book found with id="+bookId);
 		}
 	}
 

@@ -91,7 +91,7 @@ public class ReviewController {
 	 */
 	@DeleteMapping(value = "/books/{bookId}/reviews/{reviewId}")
 	public ResponseEntity<?> deleteReview(@PathVariable("bookId") Long bookId, 
-			@PathVariable("reviewId") Long reviewId) throws ReviewDeletionException {
+			@PathVariable("reviewId") Long reviewId) throws ReviewDeletionException, ResourceNotFoundException {
 		logger.info("Deleting review with bookId: {} and reviewId: {}", bookId, reviewId);
 		reviewService.deleteReview(bookId, reviewId);
 		return new ResponseEntity<>(HttpStatus.OK);

@@ -80,7 +80,7 @@ public class BookController {
 	 * @throws BookDeletionException
 	 */
 	@DeleteMapping(value = "/books/{bookId}")
-	public ResponseEntity<?> deleteBook(@PathVariable("bookId") Long bookId) throws BookDeletionException {
+	public ResponseEntity<?> deleteBook(@PathVariable("bookId") Long bookId) throws BookDeletionException, ResourceNotFoundException {
 		logger.info("Deleting book with id: {}", bookId);
 		bookService.deleteBook(bookId);
 		return new ResponseEntity<>(HttpStatus.OK);

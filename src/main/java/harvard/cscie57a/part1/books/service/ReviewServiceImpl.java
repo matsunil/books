@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import harvard.cscie57a.part1.books.exception.BookDeletionException;
 import harvard.cscie57a.part1.books.exception.ResourceNotFoundException;
+import harvard.cscie57a.part1.books.exception.ReviewDeletionException;
 import harvard.cscie57a.part1.books.model.Book;
 import harvard.cscie57a.part1.books.model.Review;
 import harvard.cscie57a.part1.books.repository.BookRepository;
@@ -81,15 +82,19 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public void deleteReview(Long bookId, Long reviewId) throws BookDeletionException {
+	public void deleteReview(Long bookId, Long reviewId) throws ReviewDeletionException, ResourceNotFoundException {
 		Optional<Review> optionalReview = reviewRepository.findByIdAndBookId(reviewId, bookId);
 		if (optionalReview.isPresent()) {
 			logger.info("Found review with bookId: {} and reviewId: {}", bookId, reviewId);
 
 			Review review = optionalReview.get();
-			reviewRepository.delete(review);
+			try {
+				reviewRepository.delete(review);
+			} catch(Exception e) {
+				throw new ReviewDeletionException("Exception deleting review with id="+bookId+" and reviewId="+reviewId);
+			}
 		} else {
-			throw new BookDeletionException("No review found with bookId="+bookId+" and reviewId="+reviewId);
+			throw new ResourceNotFoundException("No review found with bookId="+bookId+" and reviewId="+reviewId);
 		}
 	}
 
