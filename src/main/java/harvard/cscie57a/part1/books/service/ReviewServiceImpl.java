@@ -64,7 +64,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public Review updateReview(Long bookId, Long reviewId, Review reviewRequest) {
+	public Review updateReview(Long bookId, Long reviewId, Review reviewRequest) throws ResourceNotFoundException {
 		Optional<Review> optionalReview = reviewRepository.findByIdAndBookId(reviewId, bookId);
 		if (optionalReview.isPresent()) {
 			logger.info("Found review with bookId: {} and reviewId: {}", bookId, reviewId);
