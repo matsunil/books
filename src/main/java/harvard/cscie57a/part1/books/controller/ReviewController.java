@@ -78,7 +78,7 @@ public class ReviewController {
 	 */
 	@PutMapping(value = "/books/{bookId}/reviews/{reviewId}")
 	public ResponseEntity<?> updateReview(@PathVariable("bookId") Long bookId,
-			@PathVariable("reviewId") Long reviewId, @RequestBody Review review) {
+			@PathVariable("reviewId") Long reviewId, @RequestBody Review review) throws ResourceNotFoundException {
 		logger.info("Updating review: {} with bookId: {} and reviewId: {}", review, bookId, reviewId);
 		return new ResponseEntity<>(reviewService.updateReview(bookId, reviewId, review), HttpStatus.OK);
 	}

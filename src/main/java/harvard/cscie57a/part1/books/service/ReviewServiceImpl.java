@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import harvard.cscie57a.part1.books.exception.BookDeletionException;
 import harvard.cscie57a.part1.books.exception.ResourceNotFoundException;
 import harvard.cscie57a.part1.books.exception.ReviewDeletionException;
 import harvard.cscie57a.part1.books.model.Book;
@@ -27,7 +26,7 @@ public class ReviewServiceImpl implements ReviewService {
 	private ReviewRepository reviewRepository;
 
 	@Override
-	public List<Review> getAllReviewsByBookId(Long bookId) {
+	public List<Review> getAllReviewsByBookId(Long bookId) throws ResourceNotFoundException {
 		Optional<Book> optionalBook = bookRepository.findById(bookId);
 		if (optionalBook.isPresent()) {
 			logger.info("Found book with id: {}", bookId);
